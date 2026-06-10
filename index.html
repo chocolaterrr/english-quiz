@@ -10,9 +10,11 @@
         h1 { text-align: center; font-size: 1.4rem; color: #2c3e50; margin-bottom: 5px; }
         .guide-box { background-color: #ebf5fb; border-left: 4px solid #3498db; padding: 12px; border-radius: 4px; margin-bottom: 15px; font-size: 0.9rem; line-height: 1.5; color: #2c3e50; }
         
-        .select-container { margin-bottom: 20px; background-color: #f8f9fa; padding: 12px; border-radius: 8px; border: 1px solid #e1e8ed; }
+        /* ⚙️ 設定エリアのスタイル */
+        .select-group { display: flex; gap: 10px; margin-bottom: 20px; }
+        .select-container { flex: 1; background-color: #f8f9fa; padding: 12px; border-radius: 8px; border: 1px solid #e1e8ed; }
         .select-label { font-size: 0.85rem; font-weight: bold; color: #7f8c8d; margin-bottom: 5px; display: block; }
-        select { width: 100%; padding: 10px; font-size: 1rem; border-radius: 6px; border: 1px solid #bdc3c7; background-color: #fff; cursor: pointer; }
+        select { width: 100%; padding: 10px; font-size: 0.95rem; border-radius: 6px; border: 1px solid #bdc3c7; background-color: #fff; cursor: pointer; box-sizing: border-box; }
 
         .btn-refresh { display: block; width: 100%; background: #3498db; color: #fff; border: none; padding: 12px; font-size: 1rem; font-weight: bold; border-radius: 8px; cursor: pointer; text-align: center; margin-bottom: 20px; transition: background 0.2s; }
         .btn-refresh:active { background: #2980b9; }
@@ -29,7 +31,7 @@
 <body>
 
 <div class="container">
-    <h1>📊 英単語テスト (15問)</h1>
+    <h1>📊 英単語テスト</h1>
     
     <div class="guide-box">
         💡 <strong>遊び方</strong><br>
@@ -37,24 +39,41 @@
         右側の <strong>👁️ ボタンを押すと、その行の日本語の意味がパッと表示</strong> されます。
     </div>
 
-    <div class="select-container">
-        <span class="select-label">出題する範囲（セクション）を選択：</span>
-        <select id="section-select" onchange="generateQuiz()">
-            <option value="section1">パート1：常に最初に出る1〜100番</option>
-        </select>
+    <!-- ⚙️ 範囲と問題数を横並びで選べる設定エリア -->
+    <div class="select-group">
+        <!-- 範囲選択 -->
+        <div class="select-container">
+            <span class="select-label">出題範囲：</span>
+            <select id="section-select" onchange="generateQuiz()">
+                <option value="section1">1〜100番（Part1-1）</option>
+                <option value="section2">101〜300番（Part1-2）</option>
+            </select>
+        </div>
+        
+        <!-- 問数選択 -->
+        <div class="select-container">
+            <span class="select-label">問題数：</span>
+            <select id="count-select" onchange="generateQuiz()">
+                <option value="15">15問</option>
+                <option value="30">30問</option>
+                <option value="50">50問</option>
+            </select>
+        </div>
     </div>
 
-    <button class="btn-refresh" onclick="generateQuiz()">🔄 次の15問へ（シャッフル）</button>
+    <button class="btn-refresh" onclick="generateQuiz()">🔄 問題を新しくする（シャッフル）</button>
     <div id="quiz-list"></div>
 </div>
 
 <script src="words_data.js"></script>
 <script>
     function generateQuiz() {
-        const select = document.getElementById('section-select');
-        const activeSection = select.value;
+        const sectionSelect = document.getElementById('section-select');
+        const countSelect = document.getElementById('count-select');
         
-        // データの読み込みチェック
+        const activeSection = sectionSelect.value;
+        const quizCount = parseInt(countSelect.value, 10);
+        
         if (typeof wordDataset === 'undefined') {
             document.getElementById('quiz-list').innerHTML = '<div style="text-align:center;color:#e74c3c;padding:20px;">データファイルが見つかりません。</div>';
             return;
@@ -68,7 +87,10 @@
         }
 
         const shuffled = [...currentList].sort(() => Math.random() - 0.5);
-        const selected = shuffled.slice(0, 15);
+        
+        // 💡 ユーザーが選んだ数（15, 30, 50）だけ切り取る
+        const selected = shuffled.slice(0, quizCount);
+        
         const quizList = document.getElementById('quiz-list');
         quizList.innerHTML = '';
 
@@ -94,9 +116,8 @@
         btn.textContent = row.classList.contains('show') ? '✓' : '👁️';
     }
 
-    // ページが開いた瞬間に実行
     window.addEventListener('load', function() {
-        setTimeout(generateQuiz, 500); // 読み込みのラグを考慮
+        setTimeout(generateQuiz, 500);
     });
 </script>
 </body>
