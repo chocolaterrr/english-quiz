@@ -10,7 +10,6 @@
         h1 { text-align: center; font-size: 1.4rem; color: #2c3e50; margin-bottom: 5px; }
         .guide-box { background-color: #ebf5fb; border-left: 4px solid #3498db; padding: 12px; border-radius: 4px; margin-bottom: 15px; font-size: 0.9rem; line-height: 1.5; color: #2c3e50; }
         
-        /* ⚙️ 設定エリアのスタイル */
         .select-group { display: flex; gap: 10px; margin-bottom: 20px; }
         .select-container { flex: 1; background-color: #f8f9fa; padding: 12px; border-radius: 8px; border: 1px solid #e1e8ed; }
         .select-label { font-size: 0.85rem; font-weight: bold; color: #7f8c8d; margin-bottom: 5px; display: block; }
@@ -39,9 +38,7 @@
         右側の <strong>👁️ ボタンを押すと、その行の日本語の意味がパッと表示</strong> されます。
     </div>
 
-    <!-- ⚙️ 範囲と問題数を横並びで選べる設定エリア -->
     <div class="select-group">
-        <!-- 範囲選択 -->
         <div class="select-container">
             <span class="select-label">出題範囲：</span>
             <select id="section-select" onchange="generateQuiz()">
@@ -50,7 +47,6 @@
             </select>
         </div>
         
-        <!-- 問数選択 -->
         <div class="select-container">
             <span class="select-label">問題数：</span>
             <select id="count-select" onchange="generateQuiz()">
@@ -87,8 +83,6 @@
         }
 
         const shuffled = [...currentList].sort(() => Math.random() - 0.5);
-        
-        // 💡 ユーザーが選んだ数（15, 30, 50）だけ切り取る
         const selected = shuffled.slice(0, quizCount);
         
         const quizList = document.getElementById('quiz-list');
